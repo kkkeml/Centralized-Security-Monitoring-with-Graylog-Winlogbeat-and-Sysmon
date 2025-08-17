@@ -1,0 +1,22 @@
+# Сбор системных журналов Windows
+winlogbeat.event_logs:
+  - name: Application
+  - name: Security
+  - name: System
+
+  # Сбор журналов Sysmon 
+  - name: Microsoft-Windows-Sysmon/Operational
+    ignore_older: 72h  # Игнорировать события старше 72 часов
+
+# Отправка данных на Logstash (Graylog принимает данные через Logstash на порт 5044)
+output.logstash:
+  hosts: ["127.0.0.1:5044"]
+
+# Локальное логирование Winlogbeat для отладки
+logging.level: info
+logging.to_files: true
+logging.files:
+  path: C:\winlogbeat\logs
+  name: winlogbeat.log
+  keepfiles: 7
+  permissions: 0644
